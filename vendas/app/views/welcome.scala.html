@@ -1,0 +1,90 @@
+@(details:List[models.Detail],detailForm:Form[Detail])
+@import helper._
+
+@defining(play.core.PlayVersion.current) { version =>
+
+<div class="grid-container">
+    <div class="menu-icon">
+        <i class="fas fa-bars header__menu"></i>
+    </div>
+
+    <header class="header">
+        <div class="header__title">Relatório de Vendas</div>
+        <div class="header__import"><a href="@routes.HomeController.dataImport">Importar Dados</a></div>
+    </header>
+
+    <aside class="sidenav">
+        <div class="sidenav__close-icon">
+            <i class="fas fa-times sidenav__brand-close"></i>
+        </div>
+        <ul class="sidenav__list">
+            <li class="sidenav__list-item">Relação de Vendas</li>
+        </ul>
+    </aside>
+
+    <main class="main">
+        <div class="main-header">
+            <div class="main-header__heading">Seja bem vindo!</div>
+        </div>
+
+        <div class="main-form">
+        @helper.form(action = helper.CSRF(routes.HomeController.filterByDate())) {
+            <label >Data Venda:</label>
+               <input  type="date" name="@detailForm("saleDate").name" id="@detailForm("saleDate").id" value="@detailForm("saleDate").value"/>
+               <input type="submit" value="Filtrar">
+        }
+        </div>
+
+        <div class="main-cards">
+            <div class="card">
+                <ul>
+                    @if(details!=null){<table>
+                        <tr>
+                            <th>Id Estabelecimento</th>
+                            <th>Data do Evento</th>
+                            <th>Valor da Transação</th>
+                            <th>Nº Parcelas</th>
+                            <th>Valor Parcelas</th>
+                            <th>Estatus do Pagamento</th>
+                            <th>Instituição Financeira</th>
+                            <th>Cartão Bin</th>
+                            <th>Cartão Hold</th>
+                            <th>Canal de Entrada</th>
+                            <th>Código de Autorização</th>
+                            <!-- <td>Exportar</td> -->
+                        </tr>
+
+                        @for(d <- details){ <tr>
+                            <td>@d.getEstablishment()</td>
+                            <td>@d.getSaleDate()</td>
+                            <td>@d.getTransactionValue(),00</td>
+                            <td>@d.getParcelAmount()</td>
+                            <td>@d.getParcelValue(),00</td>
+                            <td>@d.getPaymentStatus()</td>
+                            <td>@d.getFinancialInstituition()</td>
+                            <td>@d.getBinCard()</td>
+                            <td>@d.getHolderCard()</td>
+                            <td>@d.getInputChannel()</td>
+                            <td>@d.getAuthCode()</td>
+                            <!-- <td><button id="myBtn" > <img src="@routes.Assets.versioned("images/report.png")" width="35" height="35" /></button></td> -->
+
+                            </tr>
+                            }
+                    </table>}
+            </div>
+
+
+
+            <!-- https://www.playframework.com/documentation/2.1.0/JavaTemplates -->
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__copyright">&copy; 2019</div>
+        <div class="footer__signature">Gustavo C. Souza</div>
+    </footer>
+</div>
+
+
+}
